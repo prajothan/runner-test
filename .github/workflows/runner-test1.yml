@@ -40,8 +40,3 @@ jobs:
         cd build_output
         pwd
         ls
-    - name: Archive production artifacts
-      uses: actions/upload-artifact@v4
-      with:
-          name: zebra-license-search-binary
-          path: build_output
