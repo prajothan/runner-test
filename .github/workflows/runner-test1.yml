@@ -22,8 +22,6 @@ jobs:
     - name: Build with Maven
       run: |
         pwd
-        cd runner-test
-        pwd
         chmod +x mvnw
         ./mvnw clean package
         
