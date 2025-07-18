@@ -47,4 +47,4 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
           name: zebra-license-search-binary
-          path: zsl-license-search/build_output
+          path: runner-test/build_output
