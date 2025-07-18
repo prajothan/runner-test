@@ -9,7 +9,7 @@ jobs:
     runs-on: self-hosted
     steps:
       - name: example-step
-        run: echo "Hello World"
+        run: echo "Hello World!"
       - name: print-ENV
         run: "[System.Environment]::GetEnvironmentVariables()"
       - name: print env variables from command prompt
