@@ -24,19 +24,3 @@ jobs:
         pwd
         chmod +x mvnw
         ./mvnw clean package -Dmaven.test.skip
-        
-    - name: Move final build
-      run:      
-        pwd
-        mkdir build_output
-        pwd
-        ls
-        chmod 777 build_output
-        chmod 777 target
-        pwd
-        ls
-        pwd
-        mv target/testrunner-0.0.1-SNAPSHOT.war build_output/testrunner-0.0.1-SNAPSHOT.war
-        cd build_output
-        pwd
-        ls
