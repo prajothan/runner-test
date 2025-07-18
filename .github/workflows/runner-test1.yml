@@ -26,10 +26,7 @@ jobs:
         ./mvnw clean package -Dmaven.test.skip
         
     - name: Move final build
-      run: |
-        pwd
-        chmod 777 runner-test
-        cd runner-test        
+      run:      
         pwd
         mkdir build_output
         pwd
