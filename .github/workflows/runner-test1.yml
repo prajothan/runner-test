@@ -7,17 +7,43 @@ on:
 jobs:
   local-job:
     runs-on: self-hosted
+  build:
+    runs-on: ubuntu-latest
     steps:
-      - name: example-step
-        run: echo "Hello World!"
-      - name: print-ENV
-        run: "[System.Environment]::GetEnvironmentVariables()"
-      - name: print env variables from command prompt
-        shell: cmd
-        run: | 
-          echo %PATH%
-          echo %JAVA_HOME%
-          echo %MAVEN_HOME%
-      - name: check if maven command works
-        shell: cmd
-        run: mvn --version
+    - uses: actions/checkout@v2
+    - name: Set up JDK 11
+      uses: actions/setup-java@v2
+      with:
+        java-version: '11'
+        distribution: 'adopt'
+    - name: Build with Maven
+      run: |
+        pwd
+        cd runner-test
+        pwd
+        chmod +x mvnw
+        ./mvnw clean package -Dmaven.test.skip
+        
+    - name: Move final build
+      run: |
+        pwd
+        chmod 777 runner-test
+        cd runner-test        
+        pwd
+        mkdir build_output
+        pwd
+        ls
+        chmod 777 build_output
+        chmod 777 target
+        pwd
+        ls
+        pwd
+        mv target/runner-test.war build_output/runner-test.war
+        cd build_output
+        pwd
+        ls
+    - name: Archive production artifacts
+      uses: actions/upload-artifact@v4
+      with:
+          name: runner-test-binary
+          path: runner-test/build_output
