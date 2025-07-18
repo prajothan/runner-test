@@ -27,9 +27,7 @@ jobs:
         
     - name: Move final build
       run: |
-        pwd
-        chmod 777 runner-test
-        cd runner-test        
+        pwd      
         pwd
         mkdir build_output
         pwd
