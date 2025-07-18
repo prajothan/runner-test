@@ -28,8 +28,8 @@ jobs:
     - name: Move final build
       run: |
         pwd
-        chmod 777 zsl-license-search
-        cd zsl-license-search        
+        chmod 777 runner-test
+        cd runner-test        
         pwd
         mkdir build_output
         pwd
