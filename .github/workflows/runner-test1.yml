@@ -25,7 +25,7 @@ jobs:
         cd runner-test
         pwd
         chmod +x mvnw
-        ./mvnw clean package -Dmaven.test.skip
+        ./mvnw clean package
         
     - name: Move final build
       run: |
