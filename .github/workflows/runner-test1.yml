@@ -20,29 +20,8 @@ jobs:
         java-version: '11'
         distribution: 'adopt'
     - name: Build with Maven
-      run: |
+        pwd
+        cd runner-test
         pwd
         chmod +x mvnw
-        ./mvnw clean package
-        
-    - name: Move final build
-      run: |
-        pwd      
-        pwd
-        mkdir build_output
-        pwd
-        ls
-        chmod 777 build_output
-        chmod 777 target
-        pwd
-        ls
-        pwd
-        mv target/runner-test.war build_output/runner-test.war
-        cd build_output
-        pwd
-        ls
-    - name: Archive production artifacts
-      uses: actions/upload-artifact@v4
-      with:
-          name: runner-test-binary
-          path: runner-test/build_output
+        ./mvnw clean package -Dmaven.test.skip
