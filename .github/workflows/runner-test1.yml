@@ -36,7 +36,7 @@ jobs:
         pwd
         ls
         pwd
-        mv target/testrunner.war build_output/testrunner.war
+        mv target/testrunner-0.0.1-SNAPSHOT.war build_output/testrunner-0.0.1-SNAPSHOT.war
         cd build_output
         pwd
         ls
