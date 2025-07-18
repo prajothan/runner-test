@@ -9,7 +9,7 @@ jobs:
     runs-on: self-hosted
     steps:
       - name: example
-        run: echo "Hello "
+        run: echo "Hello W"
   build:
     runs-on: ubuntu-latest
     steps:
