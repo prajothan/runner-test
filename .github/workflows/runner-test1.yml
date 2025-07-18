@@ -1,0 +1,23 @@
+on:
+  push:
+    branches:
+     - master
+     - main
+
+jobs:
+  local-job:
+    runs-on: self-hosted
+    steps:
+      - name: example-step
+        run: echo "Hello World!"
+      - name: print-ENV
+        run: "[System.Environment]::GetEnvironmentVariables()"
+      - name: print env variables from command prompt
+        shell: cmd
+        run: | 
+          echo %PATH%
+          echo %JAVA_HOME%
+          echo %MAVEN_HOME%
+      - name: check if maven command works
+        shell: cmd
+        run: mvn --version
