@@ -36,7 +36,7 @@ jobs:
         pwd
         ls
         pwd
-        mv target/zsl-license-search.war build_output/zsl-license-search.war
+        mv target/testrunner.war build_output/testrunner.war
         cd build_output
         pwd
         ls
