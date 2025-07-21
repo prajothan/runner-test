@@ -12,8 +12,6 @@ jobs:
     - name: Set up local JDK
       uses: actions/setup-java@v1
       with:
-        distribution: 'jdkFile'
-        jdkFile: 'C:\Program Files\Java\jdk-11.0.12'
         java-version: '11'
     - name: Build with Maven
       run: |
