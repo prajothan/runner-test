@@ -23,7 +23,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: output-war
-        path: target/**
+        path: target/testrunner-0.0.1-SNAPSHOT.war
   local-job:
     runs-on: self-hosted
     needs: build
