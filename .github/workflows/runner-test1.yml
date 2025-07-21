@@ -18,13 +18,13 @@ jobs:
         pwd
         chmod +x mvnw
         ./mvnw clean package -Dmaven.test.skip
-    - name: Upload artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: output data
-        path: target/**
   local-job:
     runs-on: self-hosted
     steps:
       - name: example
         run: echo "Hello Wo"
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: output data
+          path: target/**
