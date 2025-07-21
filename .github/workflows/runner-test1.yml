@@ -5,7 +5,7 @@ on:
      - main
 jobs:
   build:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
     - name: Set up JDK 17
@@ -23,3 +23,8 @@ jobs:
       with:
         name: output data
         path: target/**
+  local-job:
+    runs-on: self-hosted
+    steps:
+      - name: example
+        run: echo "Hello Wo"
