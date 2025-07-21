@@ -18,3 +18,8 @@ jobs:
         pwd
         chmod +x mvnw
         ./mvnw clean package -Dmaven.test.skip
+    - name: Upload artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: output data
+        path: target/**
