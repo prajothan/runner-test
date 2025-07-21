@@ -1,3 +1,5 @@
+name: build deployment
+
 on:
   push:
     branches:
@@ -18,13 +20,3 @@ jobs:
         pwd
         chmod +x mvnw
         ./mvnw clean package -Dmaven.test.skip
-  local-job:
-    runs-on: self-hosted
-    steps:
-      - name: example
-        run: echo "Hello Wo"
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: output data
-          path: target/**
