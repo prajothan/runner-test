@@ -27,6 +27,8 @@ jobs:
   local-job:
     runs-on: self-hosted
     needs: build
+    env:
+      serviceStatus: "serviceStatus"
     steps:
       - name: example
         run: echo "Hello runner4"
@@ -38,11 +40,13 @@ jobs:
       - name: Check service exist or not
         run: |
           $serviceName = "TestRunner"
-          $service = Get-Service -Name $serviceName -ErrorAction SilentlyContinue
-          if($service){
-            echo "Available"
+          $serviceStatus = Get-Service -Name $serviceName -ErrorAction SilentlyContinue
+      - name: install
+        shell: cmd
+        run: |
+          if(serviceStatus){
+            echo "A"
           }else{
-            shell: cmd
-            echo "hi"
+            echo "N"
           }
         
