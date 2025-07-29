@@ -35,10 +35,9 @@ jobs:
         with:
           name: output-war
           path: C:\prajoth\test-runner-service-wrapper
-      - name: install service
-        shell: cmd
-        run: C:\prajoth\test-runner-service-wrapper\test-runner-service-wrapper.exe install
-      - name: start service
-        shell: cmd
-        run: C:\prajoth\test-runner-service-wrapper\test-runner-service-wrapper.exe start
+      - name: Check service exist or not
+        run: |
+          $serviceName = "TestRunner"
+          $service = Get-Service -Name $serviceName -ErrorAction SilentlyContinue
+          echo $service
         
