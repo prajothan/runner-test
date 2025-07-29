@@ -44,7 +44,7 @@ jobs:
       - name: install
         shell: cmd
         run: |
-          if(serviceStatus){
+          if($serviceStatus){
             echo "A"
           }else{
             echo "N"
