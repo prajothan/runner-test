@@ -43,7 +43,7 @@ jobs:
             echo "Available"
           }else{
             - name: install service
-                shell: cmd
-                run: echo "Not Available"
+              shell: cmd
+              run: echo "Not Available"
           }
         
