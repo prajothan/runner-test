@@ -40,9 +40,9 @@ jobs:
           $serviceName = "TestRunner"
           $service = Get-Service -Name $serviceName -ErrorAction SilentlyContinue
           if ($service){
-            echo "serviceStatus=true" >> "$GITHUB_ENV"
+            echo "available"
           }else{
-            echo "serviceStatus=false" >> "$GITHUB_ENV"
+            echo "NA"
           }
           
         
