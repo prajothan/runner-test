@@ -36,9 +36,5 @@ jobs:
           name: output-war
           path: C:\prajoth\test-runner-service-wrapper
       - name: installing war as windows service
-        shell: cmd
-        run: C:\prajoth\test-runner-service-wrapper\test-runner-service-wrapper.exe install
-      - name: starting service
-        shell: cmd
-        run: C:\prajoth\test-runner-service-wrapper\test-runner-service-wrapper.exe start
+        run: powershell "(Get-Service actions.runner.*).name"
         
