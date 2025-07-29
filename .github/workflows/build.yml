@@ -42,7 +42,6 @@ jobs:
           if($service){
             echo "Available"
           }else{
-            - name: install service
               shell: cmd
               run: echo "Not Available"
           }
