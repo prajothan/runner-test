@@ -27,6 +27,8 @@ jobs:
   local-job:
     runs-on: self-hosted
     needs: build
+    env:
+      serviceStatus: false
     steps:
       - name: example
         run: echo "Hello runner4"
@@ -38,5 +40,10 @@ jobs:
       - name: Check service exist or not
         run: |
           $serviceName = "TestRunner"
-          $serviceStatus = Get-Service -Name $serviceName -ErrorAction SilentlyContinue
+          $service = Get-Service -Name $serviceName -ErrorAction SilentlyContinue
+          if($service){
+            echo "serviceStatus=true" >> $env:GITHUB_ENV
+          }
+          echo serviceStatus
+          
         
