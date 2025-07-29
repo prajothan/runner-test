@@ -44,6 +44,6 @@ jobs:
           if($service){
             echo "serviceStatus=true" >> $env:GITHUB_ENV
           }
-          echo serviceStatus
+          echo $serviceStatus
           
         
