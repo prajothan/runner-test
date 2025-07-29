@@ -41,9 +41,12 @@ jobs:
         run: |
           $serviceName = "TestRunner"
           $service = Get-Service -Name $serviceName -ErrorAction SilentlyContinue
-          if($service){
+          if [ $service ]; then
             run: echo "serviceStatus=true" >> $env:GITHUB_ENV
-          }
-          echo $serviceStatus
+          else
+            run: echo "serviceStatus=false" >> $env:GITHUB_ENV
+          fi
+      - name: Use stored variable
+        run: echo "The value of MY_VAR is $serviceStatus"
           
         
