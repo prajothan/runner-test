@@ -31,7 +31,7 @@ jobs:
       serviceStatus: false
     steps:
       - name: example
-        run: echo "Hello runner4"
+        run: echo "Hello runner"
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:
