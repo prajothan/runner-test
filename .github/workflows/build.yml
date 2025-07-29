@@ -35,9 +35,10 @@ jobs:
         with:
           name: output-war
           path: C:\prajoth\test-runner-service-wrapper
-      - name: open service wrapper folder
+      - name: installing war as windows service
         shell: cmd
-        run: cd C:\prajoth\test-runner-service-wrapper
-      - name: open service wrapper folder
+        run: C:\prajoth\test-runner-service-wrapper\test-runner-service-wrapper.exe install
+      - name: starting service
         shell: cmd
-        run: C:\prajoth\test-runner-service-wrapper\test-runner-service-wrapper.exe help
+        run: C:\prajoth\test-runner-service-wrapper\test-runner-service-wrapper.exe start
+        
