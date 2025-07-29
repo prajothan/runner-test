@@ -39,5 +39,9 @@ jobs:
         run: |
           $serviceName = "TestRunner"
           $service = Get-Service -Name $serviceName -ErrorAction SilentlyContinue
-          echo $service
+          if($service){
+            echo "Available"
+          }else{
+            echo "NA"
+          }
         
