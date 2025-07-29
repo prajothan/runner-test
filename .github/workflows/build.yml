@@ -27,8 +27,6 @@ jobs:
   local-job:
     runs-on: self-hosted
     needs: build
-    env:
-      serviceStatus: false
     steps:
       - name: example
         run: echo "Hello runner"
@@ -42,11 +40,12 @@ jobs:
           $serviceName = "TestRunner"
           $service = Get-Service -Name $serviceName -ErrorAction SilentlyContinue
           if ($service){
-            echo "serviceStatus=true" >> $env:GITHUB_ENV
+            echo "serviceStatus=true" >> "$GITHUB_ENV"
           }else{
-            echo "serviceStatus=false" >> $env:GITHUB_ENV
+            echo "serviceStatus=false" >> "$GITHUB_ENV"
           }
       - name: Use stored variable
-        run: echo "The value of MY_VAR is $serviceStatus"
+        if: env.serviceStatus == 'true'
+        run: echo "Only pushing to 'master' causes automatic deployment"
           
         
