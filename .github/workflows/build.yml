@@ -41,12 +41,10 @@ jobs:
           $service = Get-Service -Name $serviceName -ErrorAction SilentlyContinue
           if ($service){
             echo "available"
-            shell: cmd
-            run: C:\prajoth\test-runner-service-wrapper\test-runner-service-wrapper.exe install
+            run: C:\prajoth\test-runner-service-wrapper\test-runner-service-wrapper.exe uninstall
           }else{
             echo "NA"
-            shell: cmd
-            run: C:\prajoth\test-runner-service-wrapper\test-runner-service-wrapper.exe uninstall
+            run: C:\prajoth\test-runner-service-wrapper\test-runner-service-wrapper.exe install
           }
           
         
