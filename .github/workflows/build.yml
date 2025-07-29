@@ -42,7 +42,7 @@ jobs:
           if($service){
             echo "Available"
           }else{
-              shell: cmd
-              run: echo "Not Available"
+            shell: cmd
+            echo "hi"
           }
         
