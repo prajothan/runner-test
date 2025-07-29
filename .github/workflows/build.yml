@@ -35,3 +35,9 @@ jobs:
         with:
           name: output-war
           path: C:\prajoth\test-runner-service-wrapper
+      - name: open service wrapper folder
+        shell: cmd
+        run: cd C:\prajoth\test-runner-service-wrapper
+      - name: open service wrapper folder
+        shell: cmd
+        run: test-runner-service-wrapper.exe help
