@@ -40,4 +40,4 @@ jobs:
         run: cd C:\prajoth\test-runner-service-wrapper
       - name: open service wrapper folder
         shell: cmd
-        run: test-runner-service-wrapper.exe help
+        run: C:\prajoth\test-runner-service-wrapper\test-runner-service-wrapper.exe help
