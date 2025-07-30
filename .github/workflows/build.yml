@@ -43,10 +43,10 @@ jobs:
             echo "service available"
             if ($service.Status -eq 'Running') {
                 C:\prajoth\test-runner-service-wrapper\test-runner-service-wrapper.exe stop
+                sleep 15
             }
             C:\prajoth\test-runner-service-wrapper\test-runner-service-wrapper.exe uninstall
           }
-          echo "Service not Available"
           C:\prajoth\test-runner-service-wrapper\test-runner-service-wrapper.exe install
           C:\prajoth\test-runner-service-wrapper\test-runner-service-wrapper.exe start
           
