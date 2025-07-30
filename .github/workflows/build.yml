@@ -43,7 +43,7 @@ jobs:
             echo "available"
             C:\prajoth\test-runner-service-wrapper\test-runner-service-wrapper.exe uninstall
           }else{
-            echo "NA"
+            echo "NotAvailable"
             C:\prajoth\test-runner-service-wrapper\test-runner-service-wrapper.exe install
           }
           
