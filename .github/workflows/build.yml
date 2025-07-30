@@ -40,11 +40,12 @@ jobs:
           $serviceName = "TestRunner"
           $service = Get-Service -Name $serviceName -ErrorAction SilentlyContinue
           if ($service){
-            echo "available"
-            C:\prajoth\test-runner-service-wrapper\test-runner-service-wrapper.exe uninstall
+            echo "service available"
+            C:\prajoth\test-runner-service-wrapper\test-runner-service-wrapper.exe restart
           }else{
             echo "NotAvailable"
             C:\prajoth\test-runner-service-wrapper\test-runner-service-wrapper.exe install
+            C:\prajoth\test-runner-service-wrapper\test-runner-service-wrapper.exe start
           }
           
         
