@@ -5,6 +5,7 @@ on:
      - master
      - main
 jobs:
+  #building .war file in cloud
   build:
     runs-on: ubuntu-latest
     steps:
@@ -19,35 +20,47 @@ jobs:
         pwd
         chmod +x mvnw
         ./mvnw clean package -Dmaven.test.skip
+    #uploading war file into artifact - later it can be used in next job
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
         name: output-war
         path: target/testrunner-0.0.1-SNAPSHOT.war
+  #self-hosted job - which will run in windows power shell
   local-job:
     runs-on: self-hosted
+    #will work only if previous build job - success
     needs: build
     steps:
       - name: example
         run: echo "Hello runner test"
+      #downloading artifact from previous build job
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:
           name: output-war
+          #storing .war file into local system folder
           path: C:\prajoth\test-runner-service-wrapper
-      - name: Check service exist or not
+      #checking pressence of windows service
+      - name: Check windows service exist or not
         run: |
+          #name of service - also same used in winsw wrapper xml
           $serviceName = "TestRunner"
           $service = Get-Service -Name $serviceName -ErrorAction SilentlyContinue
           if ($service){
-            echo "service available"
+            #service available
             if ($service.Status -eq 'Running') {
+                #service running - so stopping
                 C:\prajoth\test-runner-service-wrapper\test-runner-service-wrapper.exe stop
+                #wait for 15 sec to complete stop - getting warning if not add this
                 sleep 15
             }
+            #service uninstall
             C:\prajoth\test-runner-service-wrapper\test-runner-service-wrapper.exe uninstall
           }
+          #service install
           C:\prajoth\test-runner-service-wrapper\test-runner-service-wrapper.exe install
+          #service start
           C:\prajoth\test-runner-service-wrapper\test-runner-service-wrapper.exe start
           
         
