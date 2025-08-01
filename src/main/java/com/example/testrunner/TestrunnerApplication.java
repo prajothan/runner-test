@@ -15,7 +15,7 @@ public class TestrunnerApplication {
 	}
 
 	@GetMapping("/hello")
-    public String hello(@RequestParam(value = "name", defaultValue = "Test Prajoth - Powershell final") String name) {
+    public String hello(@RequestParam(value = "name", defaultValue = "Test Prajoth AN - Powershell final") String name) {
       return String.format("Hello %s!", name);
     }
 }
