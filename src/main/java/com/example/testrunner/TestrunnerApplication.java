@@ -14,8 +14,8 @@ public class TestrunnerApplication {
 		SpringApplication.run(TestrunnerApplication.class, args);
 	}
 
-	@GetMapping("/hello")
-    public String hello(@RequestParam(value = "name", defaultValue = "Test Prajoth AN - Powershell final") String name) {
+	@GetMapping("/testRunner")
+    public String hello(@RequestParam(value = "name", defaultValue = "Test Prajoth AN") String name) {
       return String.format("Hello %s!", name);
     }
 }
