@@ -17,8 +17,7 @@ jobs:
         echo "Current branch: ${GITHUB_REF##*/}"
 
     - name: Set Global Variable
-      run: |
-        echo "GLOBAL_VAR=Hello" >> $GITHUB_ENV
+      run: echo "GLOBAL_VAR=Hello" >> $GITHUB_ENV
       
   #building .war file in cloud
   build:
