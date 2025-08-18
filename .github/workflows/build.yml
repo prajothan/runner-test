@@ -17,7 +17,8 @@ jobs:
         echo "Current branch: ${GITHUB_REF##*/}"
 
     - name: Set Dynamic Variable
-      run: echo "pushed_branch=${GITHUB_REF##*/" >> $GITHUB_OUTPUT
+      id: branch
+      run: echo "pushed_branch=${GITHUB_REF##*/}" >> $GITHUB_OUTPUT
       
   #building .war file in cloud
   build:
