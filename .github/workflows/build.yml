@@ -15,7 +15,7 @@ jobs:
         echo "Current branch: ${GITHUB_REF##*/}"
 
     - name: Set Dynamic Variable
-      run: echo "MY_DYNAMIC_VARIABLE=${{GITHUB_REF##*/}}" >> $GITHUB_ENV
+      run: echo "MY_DYNAMIC_VARIABLE=${GITHUB_REF##*/}" >> $GITHUB_ENV
 
     - name: Use Dynamic Variable
       run: echo "The value of MY_DYNAMIC_VARIABLE is $MY_DYNAMIC_VARIABLE"
