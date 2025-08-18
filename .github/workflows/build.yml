@@ -23,6 +23,7 @@ jobs:
   #building .war file in cloud
   build:
     runs-on: ubuntu-latest
+    needs: display-branch
     steps:
     - name: Access Global Variable
       run: |
