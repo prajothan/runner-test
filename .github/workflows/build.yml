@@ -20,6 +20,9 @@ jobs:
       id: set-output
       run: |
         echo "global_var=Hello" >> $GITHUB_ENV
+    - name: Echo Colour
+      run: |
+        echo $${{ env.global_var }}
       
   #building .war file in cloud
   build:
