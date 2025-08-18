@@ -23,7 +23,12 @@ jobs:
   #building .war file in cloud
   build:
     runs-on: ubuntu-latest
+    outputs:
+      pushed_branch: ${{ steps.branch.outputs.pushed_branch }}
     steps:
+    - name: Set Dynamic Variable
+      id: branch
+      run: echo "pushed_branch=$pushed_branch" >> $GITHUB_OUTPUT
     - uses: actions/checkout@v2
     - name: Set up JDK 17
       uses: actions/setup-java@v2
@@ -45,9 +50,9 @@ jobs:
   local-job:
     runs-on: self-hosted
     #will work only if previous build job - success
-    needs: [build,display-branch]
+    needs: [build]
     env:
-      pushed_branch: ${{ needs.display-branch.outputs.pushed_branch }}
+      pushed_branch: ${{ needs.build.outputs.pushed_branch }}
     steps:
       - name: Use Dynamic Variable
         run: echo "The value of MY_DYNAMIC_VARIABLE is $pushed_branch"
