@@ -3,6 +3,8 @@ on:
   push:
     branches:
       - '*'
+env:
+  MY_DYNAMIC_VARIABLE: "NA"
 jobs:
   display-branch:
     runs-on: ubuntu-latest
