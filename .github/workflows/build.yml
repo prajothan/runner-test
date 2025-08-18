@@ -18,8 +18,7 @@ jobs:
 
     - name: Set Global Variable
       id: set-output
-      run: |
-        echo "global_var=${GITHUB_REF##*/}" >> $GITHUB_ENV
+      run: echo "global_var=${GITHUB_REF##*/}" >> $GITHUB_ENV
       
   #building .war file in cloud
   build:
