@@ -8,7 +8,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     outputs:
-      pushed_branch: ${{ steps.build_branch.outputs.pushed_branc }}
+      pushed_branch: ${{ steps.build_branch.outputs.pushed_branch }}
     steps:
     - uses: actions/checkout@v2
     - name: Display branch name
