@@ -17,7 +17,6 @@ jobs:
         echo "Current branch: ${GITHUB_REF##*/}"
 
     - name: Set Global Variable
-      id: set-output
       run: |
         echo "GLOBAL_VAR=Hello"
       
