@@ -2,9 +2,18 @@ name: build deployment
 on:
   push:
     branches:
-     - master
-     - main
+      - '*'
 jobs:
+  display-branch:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Display branch name
+      run: |
+          echo "Current branch: ${GITHUB_REF##*/}"
+      
   #building .war file in cloud
   build:
     runs-on: ubuntu-latest
