@@ -14,11 +14,12 @@ jobs:
 
     - name: Display branch name
       run: |
-          echo "Current branch: ${GITHUB_REF##*/}"
+        echo "Current branch: ${GITHUB_REF##*/}"
 
     - name: Set Global Variable
       id: set-output
-      run: echo "global_var=${GITHUB_REF##*/}" >> $GITHUB_ENV
+      run: |
+        echo "global_var=${GITHUB_REF##*/}" >> $GITHUB_ENV
       
   #building .war file in cloud
   build:
@@ -27,7 +28,7 @@ jobs:
     steps:
     - name: Access Global Variable
       run: | 
-          echo "The global variable is: ${{ env.global_var }}"
+        echo "The global variable is: ${{ env.global_var }}"
     - uses: actions/checkout@v2
     - name: Set up JDK 17
       uses: actions/setup-java@v2
