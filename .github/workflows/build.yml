@@ -4,22 +4,6 @@ on:
     branches:
       - '*'
 jobs:
-  display-branch:
-    runs-on: ubuntu-latest
-    outputs:
-      pushed_branch: ${{ steps.branch.outputs.pushed_branch }}
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-
-    - name: Display branch name
-      run: |
-        echo "Current branch: ${GITHUB_REF##*/}"
-
-    - name: Set Dynamic Variable
-      id: branch
-      run: echo "pushed_branch=${GITHUB_REF##*/}" >> $GITHUB_OUTPUT
-      
   #building .war file in cloud
   build:
     runs-on: ubuntu-latest
