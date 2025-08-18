@@ -15,7 +15,7 @@ public class TestrunnerApplication {
 	}
 
 	@GetMapping("/testRunner")
-    public String hello(@RequestParam(value = "name", defaultValue = "Test Prajoth AN - Demo 5th July") String name) {
+    public String hello(@RequestParam(value = "name", defaultValue = "Test Prajoth AN - Demo 18th Aug") String name) {
       return String.format("Hello %s!", name);
     }
 }
