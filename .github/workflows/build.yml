@@ -27,8 +27,8 @@ jobs:
     needs: display-branch
     steps:
     - name: Access Global Variable
-      run: | 
-        run: echo "The variable is: ${{ needs.display-branch.outputs.global_var }}"
+      run: |
+        echo "The variable is: ${{ needs.display-branch.outputs.global_var }}"
     - uses: actions/checkout@v2
     - name: Set up JDK 17
       uses: actions/setup-java@v2
