@@ -27,10 +27,12 @@ jobs:
     env:
       pushed_branch: ${{ needs.build.outputs.pushed_branch }}
     outputs:
-      pushed_branch_new: ${{ steps.branch.outputs.pushed_branch_new }}
+      pushed_branch_new: ${{ steps.branch_new.outputs.pushed_branch_new }}
     steps:
+    - name: Branch
+      run: echo "The Branch is $pushed_branch"
     - name: Set Dynamic Variable
-      id: branch
+      id: branch_new
       run: echo "pushed_branch_new=$pushed_branch" >> $GITHUB_OUTPUT
     - uses: actions/checkout@v2
     - name: Set up JDK 17
