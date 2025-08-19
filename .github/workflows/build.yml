@@ -7,8 +7,6 @@ jobs:
   #building .war file in cloud
   build:
     runs-on: ubuntu-latest
-    outputs:
-      pushed_branch: ${{ steps.branch.outputs.pushed_branch }}
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
@@ -19,7 +17,7 @@ jobs:
 
     - name: Set Dynamic Variable
       id: branch
-      run: echo "pushed_branch=${GITHUB_REF##*/}" >> $GITHUB_OUTPUT
+      run: echo "::set-output name=MY_VAR::Hello ${GITHUB_REF##*/} build"
       
     - name: Set up JDK 17
       uses: actions/setup-java@v2
@@ -42,11 +40,10 @@ jobs:
     runs-on: self-hosted
     #will work only if previous build job - success
     needs: build
-    env:
-      pushed_branch: ${{ needs.build.outputs.pushed_branch }}
     steps:
       - name: Processing Branch
-        run: echo "The Branch is $pushed_branch"
+        run: |
+          echo "The variable is: ${{ needs.build.outputs.MY_VAR }}"
       - name: example
         run: echo "Hello runner test"
       #downloading artifact from previous build job
