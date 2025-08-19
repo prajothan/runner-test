@@ -33,11 +33,9 @@ jobs:
     #will work only if previous build job - success
     needs: build
     steps:
-      - name: Extract branch name
-        id: extract_branch
-        run: echo "branch_name=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
       - name: Display branch name
-        run: echo "The pushed branch is $branch_name"
+        run: |
+          echo "Current branch: ${GITHUB_REF##*/}"
       - name: example
         run: echo "Hello runner test"
       #downloading artifact from previous build job
