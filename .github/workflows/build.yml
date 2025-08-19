@@ -3,6 +3,8 @@ on:
   push:
     branches:
       - '*'
+env:
+  branch: ${GITHUB_REF##*/}
 jobs:
   #building .war file in cloud
   build:
@@ -13,7 +15,7 @@ jobs:
 
     - name: Display branch name
       run: |
-        echo "Current branch: ${GITHUB_REF##*/}"
+        echo "Current branch: $branch"
 
     - name: Set Dynamic Variable
       id: branch
