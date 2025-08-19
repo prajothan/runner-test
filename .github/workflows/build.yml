@@ -33,6 +33,8 @@ jobs:
     #will work only if previous build job - success
     needs: build
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
       - name: Display branch name
         run: |
           echo "Current branch: ${GITHUB_REF##*/}"
