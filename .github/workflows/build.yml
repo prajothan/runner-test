@@ -34,14 +34,6 @@ jobs:
     needs: build
     if: github.ref == 'refs/heads/main'
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Get current branch
-        run: |
-          echo "Current branch: ${GITHUB_REF##*/}"
-        env:
-          GITHUB_REF: ${{ github.ref }}
       - name: example
         run: echo "Hello runner test"
       #downloading artifact from previous build job
@@ -80,14 +72,6 @@ jobs:
     needs: build
     if: github.ref == 'refs/heads/development'
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Get current branch
-        run: |
-          echo "Current branch: ${GITHUB_REF##*/}"
-        env:
-          GITHUB_REF: ${{ github.ref }}
       - name: example
         run: echo "Hello runner test"
       #downloading artifact from previous build job
