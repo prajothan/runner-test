@@ -45,7 +45,9 @@ jobs:
   local-job:
     runs-on: self-hosted
     #will work only if previous build job - success
-    needs: [build, display-branch]
+    needs: 
+      - build
+      - display-branch
     env:
       pushed_branch: ${{ needs.display-branch.outputs.pushed_branch }}
     steps:
