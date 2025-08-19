@@ -26,12 +26,59 @@ jobs:
       with:
         name: output-war
         path: target/testrunner-0.0.1-SNAPSHOT.war
-  #self-hosted job - which will run in windows power shell
   
-  local-job:
+  #self-hosted job - which will run in windows power shell
+  prod-local-job:
     runs-on: self-hosted
     #will work only if previous build job - success
     needs: build
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Get current branch
+        run: |
+          echo "Current branch: ${GITHUB_REF##*/}"
+        env:
+          GITHUB_REF: ${{ github.ref }}
+      - name: example
+        run: echo "Hello runner test"
+      #downloading artifact from previous build job
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: output-war
+          #storing .war file into local system folder
+          path: C:\prajoth\test-runner-service-wrapper
+      #checking pressence of windows service
+      - name: Check windows service exist or not
+        run: |
+          #name of service - also same used in winsw wrapper xml
+          $serviceName = "TestRunner"
+          $service = Get-Service -Name $serviceName -ErrorAction SilentlyContinue
+          if ($service){
+            #service available
+            if ($service.Status -eq 'Running') {
+                #service running - so stopping
+                C:\prajoth\test-runner-service-wrapper\test-runner-service-wrapper.exe stop
+                #wait for 15 sec to complete stop - getting warning if not add this
+                sleep 15
+            }
+            #service uninstall
+            C:\prajoth\test-runner-service-wrapper\test-runner-service-wrapper.exe uninstall
+          }
+          #service install
+          C:\prajoth\test-runner-service-wrapper\test-runner-service-wrapper.exe install
+          #service start
+          C:\prajoth\test-runner-service-wrapper\test-runner-service-wrapper.exe start
+
+  #self-hosted job - which will run in windows power shell
+  dev-local-job:
+    runs-on: self-hosted
+    #will work only if previous build job - success
+    needs: build
+    if: github.ref == 'refs/heads/development'
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
