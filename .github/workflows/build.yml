@@ -16,7 +16,7 @@ jobs:
         echo "Current branch: ${GITHUB_REF##*/}"
     - name: Set Dynamic Variable
       id: build_branch
-      run: echo "pushed_branch=${GITHUB_REF##*/}" >> $GITHUB_OUTPUT
+      run: echo "pushed_branch=Pra" >> $GITHUB_OUTPUT
     - name: Set up JDK 17
       uses: actions/setup-java@v2
       with:
