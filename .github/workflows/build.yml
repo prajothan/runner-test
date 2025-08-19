@@ -73,34 +73,34 @@ jobs:
     if: github.ref == 'refs/heads/development'
     steps:
       - name: example
-        run: echo "Hello runner test"
+        run: echo "Hello runner test developer"
       #downloading artifact from previous build job
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:
           name: output-war
           #storing .war file into local system folder
-          path: C:\prajoth\test-runner-service-wrapper
+          path: C:\prajoth\test-runner-service-wrapper-developer
       #checking pressence of windows service
       - name: Check windows service exist or not
         run: |
           #name of service - also same used in winsw wrapper xml
-          $serviceName = "TestRunner"
+          $serviceName = "TestRunnerDeveloper"
           $service = Get-Service -Name $serviceName -ErrorAction SilentlyContinue
           if ($service){
             #service available
             if ($service.Status -eq 'Running') {
                 #service running - so stopping
-                C:\prajoth\test-runner-service-wrapper\test-runner-service-wrapper.exe stop
+                C:\prajoth\test-runner-service-wrapper-developer\test-runner-service-wrapper.exe stop
                 #wait for 15 sec to complete stop - getting warning if not add this
                 sleep 15
             }
             #service uninstall
-            C:\prajoth\test-runner-service-wrapper\test-runner-service-wrapper.exe uninstall
+            C:\prajoth\test-runner-service-wrapper-developer\test-runner-service-wrapper.exe uninstall
           }
           #service install
-          C:\prajoth\test-runner-service-wrapper\test-runner-service-wrapper.exe install
+          C:\prajoth\test-runner-service-wrapper-developer\test-runner-service-wrapper.exe install
           #service start
-          C:\prajoth\test-runner-service-wrapper\test-runner-service-wrapper.exe start
+          C:\prajoth\test-runner-service-wrapper-developer\test-runner-service-wrapper.exe start
           
         
