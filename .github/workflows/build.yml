@@ -35,7 +35,7 @@ jobs:
     if: github.ref == 'refs/heads/main'
     steps:
       - name: example
-        run: echo "Hello runner test"
+        run: echo "Hello runner test Production"
       #downloading artifact from previous build job
       - name: Download artifact
         uses: actions/download-artifact@v4
