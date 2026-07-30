@@ -9,7 +9,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     outputs:
-      artifact-digest: ${{ steps.upload.outputs.war-sha256 }}
+      artifact-digest: ${{ steps.checksum.outputs.war-sha256 }}
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -41,7 +41,7 @@ jobs:
         path: target/testrunner-0.0.1-SNAPSHOT.war
     - name: Print artifact digest
       run: |
-        echo "Artifact digest: ${{ steps.upload.outputs.artifact-digest }}"
+        echo "Artifact digest: ${{ steps.checksum.outputs.war-sha256 }}"
   local-job:
     runs-on: [self-hosted]
     #will work only if previous build job - success
