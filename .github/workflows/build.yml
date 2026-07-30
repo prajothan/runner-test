@@ -60,3 +60,35 @@ jobs:
           echo === Digest Validation ===
           echo Expected (from build): %EXPECTED_DIGEST%
           echo.
+
+          :: Strip the "sha256:" prefix → keep only the hex hash
+          set EXPECTED_HASH=%EXPECTED_DIGEST:sha256:=%
+
+          :: Compute SHA256 of the downloaded .war using certutil
+          :: certutil output format:
+          ::   SHA256 hash of <file>:
+          ::   <hex-hash>
+          ::   CertUtil: -hashfile command completed successfully.
+          for /f "skip=1 tokens=1" %%H in (
+            'certutil -hashfile "%WAR_PATH%" SHA256'
+          ) do (
+            if not defined ACTUAL_HASH set ACTUAL_HASH=%%H
+          )
+
+          echo Expected hash : %EXPECTED_HASH%
+          echo Actual hash   : %ACTUAL_HASH%
+          echo.
+
+          if /i "%ACTUAL_HASH%"=="%EXPECTED_HASH%" (
+            echo [PASS] Checksum validation passed. Artifact is intact.
+          ) else (
+            echo [FAIL] Checksum mismatch! Deleting corrupted file.
+            del /f /q "%WAR_PATH%"
+            exit /b 1
+          )
+
+      - name: Confirm deployment
+        shell: cmd
+        run: |
+          echo Artifact deployed successfully:
+          dir "%WAR_PATH%"
