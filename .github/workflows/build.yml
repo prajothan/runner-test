@@ -25,10 +25,14 @@ jobs:
         ./mvnw clean package -Dmaven.test.skip
     #uploading war file into artifact - later it can be used in next job
     - name: Upload artifact
+      id: upload
       uses: actions/upload-artifact@v4
       with:
         name: output-war
         path: target/testrunner-0.0.1-SNAPSHOT.war
+    - name: Print artifact digest
+      run: |
+        echo "Artifact digest: ${{ steps.upload.outputs.artifact-digest }}"
   local-job:
     runs-on: [self-hosted]
     #will work only if previous build job - success
