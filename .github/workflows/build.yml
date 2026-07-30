@@ -17,12 +17,21 @@ jobs:
       uses: actions/setup-java@v3
       with:
         java-version: '17'
-        distribution: 'temurin'
+        distribution: 'adopt'
     - name: Build with Maven
       run: |
         pwd
         chmod +x mvnw
         ./mvnw clean package -Dmaven.test.skip
+
+    - name: Compute SHA256 of .war before upload
+      id: checksum
+      run: |
+        WAR=target/testrunner-0.0.1-SNAPSHOT.war
+        HASH=$(sha256sum "$WAR" | awk '{print $1}')
+        echo "war-sha256=${HASH}" >> "$GITHUB_OUTPUT"
+        echo "Computed SHA256: ${HASH}"
+        
     #uploading war file into artifact - later it can be used in next job
     - name: Upload artifact
       id: upload
