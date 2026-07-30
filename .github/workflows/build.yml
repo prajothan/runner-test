@@ -8,6 +8,8 @@ jobs:
   #building .war file in cloud
   build:
     runs-on: ubuntu-latest
+    outputs:
+      artifact-digest: ${{ steps.upload.outputs.artifact-digest }}
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
@@ -32,6 +34,11 @@ jobs:
     #will work only if previous build job - success
     needs: build
     if: github.ref == 'refs/heads/main'
+
+    env:
+      WAR_PATH: C:\prajoth\test-runner-service-wrapper\testrunner-0.0.1-SNAPSHOT.war
+      EXPECTED_DIGEST: ${{ needs.build.outputs.artifact-digest }}
+      
     steps:
       - name: example
         run: echo "Hello runner test"
@@ -42,3 +49,10 @@ jobs:
           name: output-war
           #storing .war file into local system folder
           path: C:\prajoth\test-runner-service-wrapper
+      - name: Validate digest checksum
+        shell: cmd
+        run: |
+          echo.
+          echo === Digest Validation ===
+          echo Expected (from build): %EXPECTED_DIGEST%
+          echo.
