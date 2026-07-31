@@ -49,7 +49,7 @@ jobs:
     if: github.ref == 'refs/heads/main'
 
     env:
-      WAR_PATH: C:\prajoth\test-runner-service-wrapper\testrunner-0.0.1-SNAPSHOT.war
+      WAR_PATH: C:\prajoth\test-runner-service-wrapper\Temp\testrunner-0.0.1-SNAPSHOT.war
       EXPECTED_DIGEST: ${{ needs.build.outputs.artifact-digest }}
       
     steps:
@@ -61,7 +61,7 @@ jobs:
         with:
           name: output-war
           #storing .war file into local system folder
-          path: C:\prajoth\test-runner-service-wrapper
+          path: C:\prajoth\test-runner-service-wrapper\Temp
       - name: Validate digest checksum
         shell: cmd
         run: |
