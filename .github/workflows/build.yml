@@ -9,7 +9,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     outputs:
-      artifact-digest: ${{ steps.checksum.outputs.war-sha256 }}
+      artifact-digest: ${{ steps.upload.outputs.artifact-digest }}
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
