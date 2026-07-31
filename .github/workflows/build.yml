@@ -96,8 +96,8 @@ jobs:
             exit /b 1
           )
 
-      - name: Confirm deployment
+      - name: Move WAR to actual folder
         shell: cmd
         run: |
-          echo Artifact deployed successfully:
-          dir "%WAR_PATH%"
+          run: |
+          move "C:\prajoth\test-runner-service-wrapper\Temp\testrunner-0.0.1-SNAPSHOT.war" "C:\prajoth\test-runner-service-wrapper\testrunner-0.0.1-SNAPSHOT.war"
