@@ -99,5 +99,4 @@ jobs:
       - name: Move WAR to actual folder
         shell: cmd
         run: |
-          run: |
           move "C:\prajoth\test-runner-service-wrapper\Temp\testrunner-0.0.1-SNAPSHOT.war" "C:\prajoth\test-runner-service-wrapper\testrunner-0.0.1-SNAPSHOT.war"
