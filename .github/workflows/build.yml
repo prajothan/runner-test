@@ -100,3 +100,25 @@ jobs:
         shell: cmd
         run: |
           move "C:\prajoth\test-runner-service-wrapper\Temp\testrunner-0.0.1-SNAPSHOT.war" "C:\prajoth\test-runner-service-wrapper\testrunner-0.0.1-SNAPSHOT.war"
+
+      #checking pressence of windows service
+      - name: Check windows service exist or not
+        run: |
+          #name of service - also same used in winsw wrapper xml
+          $serviceName = "TestRunner"
+          $service = Get-Service -Name $serviceName -ErrorAction SilentlyContinue
+          if ($service){
+            #service available
+            if ($service.Status -eq 'Running') {
+                #service running - so stopping
+                C:\prajoth\test-runner-service-wrapper\test-runner-service-wrapper.exe stop
+                #wait for 15 sec to complete stop - getting warning if not add this
+                sleep 15
+            }
+            #service uninstall
+            C:\prajoth\test-runner-service-wrapper\test-runner-service-wrapper.exe uninstall
+          }
+          #service install
+          C:\prajoth\test-runner-service-wrapper\test-runner-service-wrapper.exe install
+          #service start
+          C:\prajoth\test-runner-service-wrapper\test-runner-service-wrapper.exe start
