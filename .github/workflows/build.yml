@@ -31,6 +31,22 @@ jobs:
         HASH=$(sha256sum "$WAR" | awk '{print $1}')
         echo "war-sha256=${HASH}" >> "$GITHUB_OUTPUT"
         echo "Computed SHA256: ${HASH}"
+
+    - name: Move final build
+      run: |     
+        pwd
+        mkdir build_output
+        pwd
+        ls
+        chmod 777 build_output
+        chmod 777 target
+        pwd
+        ls
+        pwd
+        mv target/testrunner-0.0.1-SNAPSHOT.war build_output/testrunner-0.0.1-SNAPSHOT.war
+        cd build_output
+        pwd
+        ls
         
     #uploading war file into artifact - later it can be used in next job
     - name: Upload artifact
@@ -38,7 +54,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: output-war
-        path: target/testrunner-0.0.1-SNAPSHOT.war
+        path: build_output/testrunner-0.0.1-SNAPSHOT.war
     - name: Print artifact digest
       run: |
         echo "Artifact digest: ${{ steps.checksum.outputs.war-sha256 }}"
