@@ -37,6 +37,7 @@ jobs:
           cosign sign-blob \
             --key env://COSIGN_PRIVATE_KEY \
             --output-signature target/testrunner-0.0.1-SNAPSHOT.war.sig \
+            --tlog-upload=false \
             target/testrunner-0.0.1-SNAPSHOT.war
           echo "WAR signed successfully."
 
@@ -99,6 +100,7 @@ jobs:
           cosign verify-blob ^
             --key "%COSIGN_PUBLIC_KEY%" ^
             --signature "%SIG_PATH%" ^
+            --insecure-ignore-tlog ^
             "%WAR_PATH%"
 
           if %ERRORLEVEL% neq 0 (
