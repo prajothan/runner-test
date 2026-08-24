@@ -1,30 +1,124 @@
-name: Generate cosign key pair (run once)
+name: build deployment
 on:
-  workflow_dispatch:
-
-jobs:
-  generate-keys:
+  push:
+    branches:
+      - '*'
+    name: build deployment
+jobs: 
+  #building .war file in cloud
+  build:
     runs-on: ubuntu-latest
-
+    outputs:
+      artifact-digest: ${{ steps.checksum.outputs.war-sha256 }}
     steps:
-      - name: Install cosign
-        uses: sigstore/cosign-installer@v3
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'adopt'
+    - name: Build with Maven
+      run: |
+        pwd
+        chmod +x mvnw
+        ./mvnw clean package -Dmaven.test.skip
 
-      - name: Generate key pair and print
-        env:
-          COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
+    - name: Compute SHA256 of .war before upload
+      id: checksum
+      run: |
+        WAR=target/testrunner-0.0.1-SNAPSHOT.war
+        HASH=$(sha256sum "$WAR" | awk '{print $1}')
+        echo "war-sha256=${HASH}" >> "$GITHUB_OUTPUT"
+        echo "Computed SHA256: ${HASH}"
+        
+    #uploading war file into artifact - later it can be used in next job
+    - name: Upload artifact
+      id: upload
+      uses: actions/upload-artifact@v4
+      with:
+        name: output-war
+        path: target/testrunner-0.0.1-SNAPSHOT.war
+    - name: Print artifact digest
+      run: |
+        echo "Artifact digest: ${{ steps.checksum.outputs.war-sha256 }}"
+  local-job:
+    runs-on: [self-hosted]
+    #will work only if previous build job - success
+    needs: build
+    if: github.ref == 'refs/heads/main'
+
+    env:
+      WAR_PATH: C:\prajoth\test-runner-service-wrapper\Temp\testrunner-0.0.1-SNAPSHOT.war
+      EXPECTED_DIGEST: ${{ needs.build.outputs.artifact-digest }}
+      
+    steps:
+      - name: example
+        run: echo "Hello runner test "
+      #downloading artifact from previous build job
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: output-war
+          #storing .war file into local system folder
+          path: C:\prajoth\test-runner-service-wrapper\Temp
+      - name: Validate digest checksum
+        shell: cmd
         run: |
-          cosign generate-key-pair
+          echo.
+          echo === Digest Validation ===
+          echo Expected (from build): %EXPECTED_DIGEST%
+          echo.
 
-          echo ""
-          echo "========== COPY BELOW INTO GitHub Secrets =========="
-          echo ""
-          echo "--- Secret name: COSIGN_PRIVATE_KEY ---"
-          cat cosign.key
-          echo ""
-          echo "--- Secret name: COSIGN_PUBLIC_KEY ---"
-          cat cosign.pub
-          echo ""
-          echo "===================================================="
+          :: Strip the "sha256:" prefix → keep only the hex hash
+          set EXPECTED_HASH=%EXPECTED_DIGEST:sha256:=%
 
-          rm -f cosign.key cosign.pub
+          :: Compute SHA256 of the downloaded .war using certutil
+          :: certutil output format:
+          ::   SHA256 hash of <file>:
+          ::   <hex-hash>
+          ::   CertUtil: -hashfile command completed successfully.
+          for /f "skip=1 tokens=1" %%H in (
+            'certutil -hashfile "%WAR_PATH%" SHA256'
+          ) do (
+            if not defined ACTUAL_HASH set ACTUAL_HASH=%%H
+          )
+
+          echo Expected hash : %EXPECTED_HASH%
+          echo Actual hash   : %ACTUAL_HASH%
+          echo.
+
+          if /i "%ACTUAL_HASH%"=="%EXPECTED_HASH%" (
+            echo [PASS] Checksum validation passed. Artifact is intact.
+          ) else (
+            echo [FAIL] Checksum mismatch! Deleting corrupted file.
+            del /f /q "%WAR_PATH%"
+            exit /b 1
+          )
+
+      - name: Move WAR to actual folder
+        shell: cmd
+        run: |
+          move "C:\prajoth\test-runner-service-wrapper\Temp\testrunner-0.0.1-SNAPSHOT.war" "C:\prajoth\test-runner-service-wrapper\testrunner-0.0.1-SNAPSHOT.war"
+
+      #checking pressence of windows service
+      - name: Check windows service exist or not
+        run: |
+          #name of service - also same used in winsw wrapper xml
+          $serviceName = "TestRunner"
+          $service = Get-Service -Name $serviceName -ErrorAction SilentlyContinue
+          if ($service){
+            #service available
+            if ($service.Status -eq 'Running') {
+                #service running - so stopping
+                C:\prajoth\test-runner-service-wrapper\test-runner-service-wrapper.exe stop
+                #wait for 15 sec to complete stop - getting warning if not add this
+                sleep 15
+            }
+            #service uninstall
+            C:\prajoth\test-runner-service-wrapper\test-runner-service-wrapper.exe uninstall
+          }
+          #service install
+          C:\prajoth\test-runner-service-wrapper\test-runner-service-wrapper.exe install
+          #service start
+          C:\prajoth\test-runner-service-wrapper\test-runner-service-wrapper.exe start
