@@ -1,28 +1,28 @@
 name: Generate cosign key pair (run once)
 on:
   workflow_dispatch:
+
 jobs:
   generate-keys:
     runs-on: ubuntu-latest
-    permissions:
-      secrets: write   # needed to write back to repo secrets
+
     steps:
       - name: Install cosign
         uses: sigstore/cosign-installer@v3
+
       - name: Generate key pair
         env:
           COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
         run: |
-          # COSIGN_PASSWORD env var is read automatically by cosign
           cosign generate-key-pair
           # cosign.key and cosign.pub are now in the working directory
+
       - name: Store keys as GitHub secrets
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.PAT_TOKEN }}
           GH_REPO: ${{ github.repository }}
         run: |
           gh secret set COSIGN_PRIVATE_KEY < cosign.key
           gh secret set COSIGN_PUBLIC_KEY  < cosign.pub
-          # Wipe keys from disk immediately
           rm -f cosign.key cosign.pub
-          echo "Keys stored as secrets and deleted from runner."
+          echo "Keys stored and deleted from runner."
