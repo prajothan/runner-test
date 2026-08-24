@@ -19,9 +19,8 @@ jobs:
       - name: Store keys as GitHub secrets
         env:
           GH_TOKEN: ${{ secrets.PAT_TOKEN }}
-          GH_REPO: ${{ github.repository }}
         run: |
-          gh secret set COSIGN_PRIVATE_KEY < cosign.key
-          gh secret set COSIGN_PUBLIC_KEY  < cosign.pub
+          gh secret set COSIGN_PRIVATE_KEY --repo ${{ github.repository }} < cosign.key
+          gh secret set COSIGN_PUBLIC_KEY  --repo ${{ github.repository }} < cosign.pub
           rm -f cosign.key cosign.pub
           echo "Keys stored and deleted from runner."
