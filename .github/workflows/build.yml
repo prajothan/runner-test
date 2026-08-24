@@ -70,6 +70,9 @@ jobs:
       - name: example
         run: echo "Hello runner test"
 
+      - name: Install Cosign
+        uses: sigstore/cosign-installer@v3
+
       # Download .war from the build job
       - name: Download WAR artifact
         uses: actions/download-artifact@v4
