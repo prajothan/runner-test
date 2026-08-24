@@ -1,7 +1,6 @@
 name: Generate cosign key pair (run once)
 on:
   workflow_dispatch:
-
 jobs:
   generate-keys:
     runs-on: ubuntu-latest
