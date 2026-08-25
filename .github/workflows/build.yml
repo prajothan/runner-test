@@ -39,7 +39,7 @@ jobs:
             --output-signature target/testrunner-0.0.1-SNAPSHOT.war.sig \
             --tlog-upload=false \
             target/testrunner-0.0.1-SNAPSHOT.war
-          echo "WAR signed successfully."
+          echo "WAR signed successfully. "
 
       # Upload .war and its detached signature as separate artifacts
       - name: Upload WAR artifact
