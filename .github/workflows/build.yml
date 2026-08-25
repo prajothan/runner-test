@@ -68,7 +68,7 @@ jobs:
 
     steps:
       - name: example
-        run: echo "Hello runner test "
+        run: echo "Hello runner test"
 
       # Download .war from the build job
       - name: Download WAR artifact
