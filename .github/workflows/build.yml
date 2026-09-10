@@ -100,7 +100,8 @@ jobs:
           cosign verify-blob ^
             --key "%COSIGN_PUBLIC_KEY%" ^
             --signature "%SIG_PATH%" ^
-            --insecure-ignore-tlog
+            --insecure-ignore-tlog ^
+            "%WAR_PATH%"
 
           if %ERRORLEVEL% neq 0 (
             echo [FAIL] Signature verification failed! Removing untrusted files.
