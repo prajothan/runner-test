@@ -41,6 +41,13 @@ jobs:
             target/testrunner-0.0.1-SNAPSHOT.war
           echo "WAR signed successfully."
 
+      # Upload .war and its detached signature as separate artifacts
+      - name: Upload WAR artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: output-war
+          path: target/testrunner-0.0.1-SNAPSHOT.war
+
       - name: Upload WAR signature artifact
         uses: actions/upload-artifact@v4
         with:
@@ -54,6 +61,7 @@ jobs:
 
     env:
       TEMP_DIR: C:\prajoth\test-runner-service-wrapper\Temp
+      WAR_PATH: C:\prajoth\test-runner-service-wrapper\Temp\testrunner-0.0.1-SNAPSHOT.war
       SIG_PATH: C:\prajoth\test-runner-service-wrapper\Temp\testrunner-0.0.1-SNAPSHOT.war.sig
       # Public key must be pre-placed on the self-hosted runner at this path.
       COSIGN_PUBLIC_KEY: C:\prajoth\cosign.pub
@@ -61,6 +69,13 @@ jobs:
     steps:
       - name: example
         run: echo "Hello runner test"
+
+      # Download .war from the build job
+      - name: Download WAR artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: output-war
+          path: C:\prajoth\test-runner-service-wrapper\Temp
 
       # Download the detached Cosign signature
       - name: Download WAR signature artifact
@@ -77,6 +92,7 @@ jobs:
         run: |
           echo.
           echo === Cosign Signature Verification ===
+          echo WAR     : %WAR_PATH%
           echo Sig     : %SIG_PATH%
           echo Pub key : %COSIGN_PUBLIC_KEY%
           echo.
@@ -85,9 +101,11 @@ jobs:
             --key "%COSIGN_PUBLIC_KEY%" ^
             --signature "%SIG_PATH%" ^
             --insecure-ignore-tlog ^
+            "%WAR_PATH%"
 
           if %ERRORLEVEL% neq 0 (
             echo [FAIL] Signature verification failed! Removing untrusted files.
+            del /f /q "%WAR_PATH%"
             del /f /q "%SIG_PATH%"
             exit /b 1
           )
@@ -96,7 +114,7 @@ jobs:
       - name: Move WAR to deployment folder
         shell: cmd
         run: |
-          move "%SIG_PATH%" "C:\prajoth\test-runner-service-wrapper\testrunner-0.0.1-SNAPSHOT.war.sig"
+          move "%WAR_PATH%" "C:\prajoth\test-runner-service-wrapper\testrunner-0.0.1-SNAPSHOT.war"
 
       # Check Windows service presence and restart
       - name: Manage TestRunner Windows service
