@@ -114,7 +114,7 @@ jobs:
       - name: Move WAR to deployment folder
         shell: cmd
         run: |
-          move "%WAR_PATH%" "C:\prajoth\test-runner-service-wrapper\testrunner-0.0.1-SNAPSHOT.war"
+          move "%SIG_PATH%" "C:\prajoth\test-runner-service-wrapper\testrunner-0.0.1-SNAPSHOT.war.sig"
 
       # Check Windows service presence and restart
       - name: Manage TestRunner Windows service
