@@ -103,7 +103,7 @@ jobs:
         shell: cmd
         run: |
           echo.
-          echo === Digest Validation ===
+          echo === Digest Validation ==
           echo Expected (from build): %EXPECTED_DIGEST%
           echo.
 
