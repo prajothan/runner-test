@@ -8,6 +8,8 @@ jobs:
   # Building .war file in cloud
   build:
     runs-on: ubuntu-latest
+    outputs:
+        artifact-digest: ${{ steps.checksum.outputs.war-sha256 }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -41,6 +43,14 @@ jobs:
             target/testrunner-0.0.1-SNAPSHOT.war
           echo "WAR signed successfully."
 
+      - name: Compute SHA256 of .war before upload
+        id: checksum
+        run: |
+          WAR=target/testrunner-0.0.1-SNAPSHOT.war.sig
+          HASH=$(sha256sum "$WAR" | awk '{print $1}')
+          echo "war-sha256=${HASH}" >> "$GITHUB_OUTPUT"
+          echo "Computed SHA256: ${HASH}"
+
       # Upload .war and its detached signature as separate artifacts
       - name: Upload WAR artifact
         uses: actions/upload-artifact@v4
@@ -54,6 +64,10 @@ jobs:
           name: output-war-sig
           path: target/testrunner-0.0.1-SNAPSHOT.war.sig
 
+      - name: Print artifact digest
+        run: |
+          echo "Artifact digest: ${{ steps.checksum.outputs.war-sha256 }}"
+
   local-job:
     runs-on: [self-hosted]
     needs: build
@@ -65,6 +79,7 @@ jobs:
       SIG_PATH: C:\prajoth\test-runner-service-wrapper\Temp\testrunner-0.0.1-SNAPSHOT.war.sig
       # Public key must be pre-placed on the self-hosted runner at this path.
       COSIGN_PUBLIC_KEY: C:\prajoth\cosign.pub
+      EXPECTED_DIGEST: ${{ needs.build.outputs.artifact-digest }}
 
     steps:
       - name: example
@@ -83,6 +98,40 @@ jobs:
         with:
           name: output-war-sig
           path: C:\prajoth\test-runner-service-wrapper\Temp
+
+      - name: Validate digest checksum
+        shell: cmd
+        run: |
+          echo.
+          echo === Digest Validation ===
+          echo Expected (from build): %EXPECTED_DIGEST%
+          echo.
+
+          :: Strip the "sha256:" prefix → keep only the hex hash
+          set EXPECTED_HASH=%EXPECTED_DIGEST:sha256:=%
+
+          :: Compute SHA256 of the downloaded .war using certutil
+          :: certutil output format:
+          ::   SHA256 hash of <file>:
+          ::   <hex-hash>
+          ::   CertUtil: -hashfile command completed successfully.
+          for /f "skip=1 tokens=1" %%H in (
+            'certutil -hashfile "%SIG_PATH%" SHA256'
+          ) do (
+            if not defined ACTUAL_HASH set ACTUAL_HASH=%%H
+          )
+
+          echo Expected hash : %EXPECTED_HASH%
+          echo Actual hash   : %ACTUAL_HASH%
+          echo.
+
+          if /i "%ACTUAL_HASH%"=="%EXPECTED_HASH%" (
+            echo [PASS] Checksum validation passed. Artifact is intact.
+          ) else (
+            echo [FAIL] Checksum mismatch! Deleting corrupted file.
+            del /f /q "%SIG_PATH%"
+            exit /b 1
+          )
 
       # Verify the .war against its signature using the local public key.
       # cosign must be installed on the self-hosted runner
