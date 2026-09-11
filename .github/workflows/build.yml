@@ -9,7 +9,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     outputs:
-        artifact-digest: ${{ steps.upload.outputs.artifact-digest }}
+        artifact-digest: ${{ steps.checksum.outputs.war-sha256 }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -46,7 +46,7 @@ jobs:
       - name: Compute SHA256 of .war before upload
         id: checksum
         run: |
-          WAR=target/testrunner-0.0.1-SNAPSHOT.war.sig
+          WAR=target/testrunner-0.0.1-SNAPSHOT.war
           HASH=$(sha256sum "$WAR" | awk '{print $1}')
           echo "war-sha256=${HASH}" >> "$GITHUB_OUTPUT"
           echo "Computed SHA256: ${HASH}"
@@ -59,7 +59,6 @@ jobs:
           path: target/testrunner-0.0.1-SNAPSHOT.war
 
       - name: Upload WAR signature artifact
-        id: upload
         uses: actions/upload-artifact@v4
         with:
           name: output-war-sig
@@ -117,7 +116,7 @@ jobs:
           ::   <hex-hash>
           ::   CertUtil: -hashfile command completed successfully.
           for /f "skip=1 tokens=1" %%H in (
-            'certutil -hashfile "%SIG_PATH%" SHA256'
+            'certutil -hashfile "%WAR_PATH%" SHA256'
           ) do (
             if not defined ACTUAL_HASH set ACTUAL_HASH=%%H
           )
@@ -130,7 +129,7 @@ jobs:
             echo [PASS] Checksum validation passed. Artifact is intact.
           ) else (
             echo [FAIL] Checksum mismatch! Deleting corrupted file.
-            del /f /q "%SIG_PATH%"
+            del /f /q "%WAR_PATH%"
             exit /b 1
           )
 
@@ -164,7 +163,7 @@ jobs:
       - name: Move WAR to deployment folder
         shell: cmd
         run: |
-          move "%SIG_PATH%" "C:\prajoth\test-runner-service-wrapper\testrunner-0.0.1-SNAPSHOT.war.sig"
+          move "%WAR_PATH%" "C:\prajoth\test-runner-service-wrapper\testrunner-0.0.1-SNAPSHOT.war"
 
       # Check Windows service presence and restart
       - name: Manage TestRunner Windows service
